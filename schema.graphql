@@ -1,0 +1,16 @@
+type UniswapV3Factory_PoolCreated {
+    id: ID!
+    token0: String!
+    token1: String!
+    fee: BigInt!
+    tickSpacing: BigInt!
+    pool: String!
+}
+
+type UniswapV3Pool_Initialize {
+    id: ID!
+    sqrtPriceX96: BigInt!
+    tick: BigInt!
+    pool: String!
+    poolDetails: [UniswapV3Factory_PoolCreated!]! @derivedFrom(field: "id")
+}
