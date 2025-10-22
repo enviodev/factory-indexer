@@ -20,14 +20,17 @@ UniswapV3Factory.PoolCreated.contractRegister(({ event, context }) => {
   context.addUniswapV3Pool(event.params.pool);
 });
 
-UniswapV3Pool.Initialize.handler(async ({ event, context }) => {
+UniswapV3Pool.Swap.handler(async ({ event, context }) => {
   const entity = {
-    id: `${event.chainId}_${event.srcAddress}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     sqrtPriceX96: event.params.sqrtPriceX96,
-    tick: event.params.tick,
+    liquidity: event.params.liquidity,
+    amount0: event.params.amount0,
+    amount1: event.params.amount1,
+    sender: event.params.sender,
+    recipient: event.params.recipient,
     pool: event.srcAddress,
-    poolDetails: `${event.chainId}_${event.srcAddress}`,
   };
 
-  context.UniswapV3Pool_Initialize.set(entity);
+  context.UniswapV3Pool_Swap.set(entity);
 });

@@ -5,12 +5,16 @@ type UniswapV3Factory_PoolCreated {
     fee: BigInt!
     tickSpacing: BigInt!
     pool: String!
+    swaps: [UniswapV3Pool_Swap!]! @derivedFrom(field: "pool")
 }
 
-type UniswapV3Pool_Initialize {
+type UniswapV3Pool_Swap {
     id: ID!
+    sender: String!
+    recipient: String!
+    amount0: BigInt!
+    amount1: BigInt!
     sqrtPriceX96: BigInt!
-    tick: BigInt!
+    liquidity: BigInt!
     pool: String!
-    poolDetails: [UniswapV3Factory_PoolCreated!]! @derivedFrom(field: "id")
 }

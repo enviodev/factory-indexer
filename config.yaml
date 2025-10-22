@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./node_modules/envio/evm.schema.json
 name: factory-pattern
-descirption: Example indexer for indexing factory-deployed contracts
+description: Example indexer for indexing factory-deployed contracts
 contracts:
     - name: UniswapV3Factory
       handler: src/EventHandlers.ts
@@ -9,7 +9,7 @@ contracts:
     - name: UniswapV3Pool
       handler: src/EventHandlers.ts
       events:
-          - event: Initialize(uint160 sqrtPriceX96, int24 tick)
+          - event: Swap(address indexed sender, address indexed recipient, int256 amount0, int256 amount1, uint160 sqrtPriceX96, uint128 liquidity, int24 tick)
 
 networks:
     - id: 1
