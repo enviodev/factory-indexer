@@ -1,20 +1,22 @@
 type UniswapV3Factory_PoolCreated {
-    id: ID!
-    token0: String!
-    token1: String!
-    fee: BigInt!
-    tickSpacing: BigInt!
-    pool: String!
-    swaps: [UniswapV3Pool_Swap!]! @derivedFrom(field: "pool")
+  id: ID!                                   # Unique ID (chainId_poolAddress)
+  token0: String!                           # Address of token0 in the pool
+  token1: String!                           # Address of token1 in the pool
+  fee: BigInt!                              # Pool fee tier (e.g., 500, 3000, 10000)
+  tickSpacing: BigInt!                      # Tick spacing configured for this pool
+  pool: String!                             # Address of the deployed Uniswap V3 pool
+
+  swaps: [UniswapV3Pool_Swap!]!             # All Swap events linked to this pool
+    @derivedFrom(field: "poolId")           # Reverse relation via UniswapV3Pool_Swap.poolId
 }
 
 type UniswapV3Pool_Swap {
-    id: ID!
-    sender: String!
-    recipient: String!
-    amount0: BigInt!
-    amount1: BigInt!
-    sqrtPriceX96: BigInt!
-    liquidity: BigInt!
-    pool: String!
+  id: ID!                                   # Unique swap ID (tx hash + log index)
+  sender: String!                           # Address that initiated the swap
+  recipient: String!                        # Address receiving the output tokens
+  amount0: BigInt!                          # Token0 amount in the swap (positive/negative)
+  amount1: BigInt!                          # Token1 amount in the swap (positive/negative)
+  sqrtPriceX96: BigInt!                     # Current sqrt(price) after the swap (Q96 format)
+  liquidity: BigInt!                        # Liquidity at the time of the swap
+  poolId: String!                           # References UniswapV3Factory_PoolCreated.id
 }
