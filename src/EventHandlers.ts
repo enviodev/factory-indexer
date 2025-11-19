@@ -4,23 +4,8 @@
 import {
   UniswapV3Factory,
   UniswapV3Pool,
-  UniswapV3Factory_PoolCreated,
   UniswapV3Pool_Swap,
 } from "generated";
-
-// Handle PoolCreated events emitted by the UniswapV3Factory
-UniswapV3Factory.PoolCreated.handler(async ({ event, context }) => {
-  const entity: UniswapV3Factory_PoolCreated = {
-    id: `${event.chainId}_${event.params.pool}`,   // Unique ID for the pool
-    token0: event.params.token0,                  // Token0 address
-    token1: event.params.token1,                  // Token1 address
-    fee: event.params.fee,                        // Pool fee tier
-    tickSpacing: event.params.tickSpacing,        // Tick spacing for ticks
-    pool: event.params.pool,                      // Pool contract address
-  };
-
-  context.UniswapV3Factory_PoolCreated.set(entity); // Store pool entity
-});
 
 // Register the newly created pool so HyperIndex listens to its events
 UniswapV3Factory.PoolCreated.contractRegister(({ event, context }) => {
@@ -37,7 +22,7 @@ UniswapV3Pool.Swap.handler(async ({ event, context }) => {
     amount1: event.params.amount1,                                  // Token1 delta
     sender: event.params.sender,                                    // Swap initiator
     recipient: event.params.recipient,                              // Swap output recipient
-    poolId: `${event.chainId}_${event.srcAddress}`,                 // Link back to pool entity
+    pool: event.srcAddress,                                         // Pool address
   };
 
   context.UniswapV3Pool_Swap.set(entity);                           // Store swap entity
