@@ -16,6 +16,7 @@ UniswapV3Factory.PoolCreated.contractRegister(({ event, context }) => {
 UniswapV3Pool.Swap.handler(async ({ event, context }) => {
   const entity: UniswapV3Pool_Swap = {
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`, // Unique swap ID
+    chainId: event.chainId,                                           // Chain ID
     sqrtPriceX96: event.params.sqrtPriceX96,                        // Post-swap sqrt price
     liquidity: event.params.liquidity,                              // Liquidity after the swap
     amount0: event.params.amount0,                                  // Token0 delta
