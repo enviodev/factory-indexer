@@ -1,9 +1,5 @@
 import assert from "assert";
-import { 
-  TestHelpers,
-  UniswapV3Factory_PoolCreated,
-  UniswapV3Pool_Swap
-} from "generated";
+import { TestHelpers, UniswapV3Factory_PoolCreated } from "envio";
 const { MockDb, UniswapV3Factory, UniswapV3Pool } = TestHelpers;
 
 describe("UniswapV3Factory contract PoolCreated event tests", () => {

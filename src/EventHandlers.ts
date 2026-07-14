@@ -1,19 +1,20 @@
 /*
  * Please refer to https://docs.envio.dev for a thorough guide on all Envio indexer features
  */
-import {
-  UniswapV3Factory,
-  UniswapV3Pool,
-  UniswapV3Pool_Swap,
-} from "generated";
+import { indexer, UniswapV3Pool, UniswapV3Pool_Swap } from "envio";
 
 // Register the newly created pool so HyperIndex listens to its events
-UniswapV3Factory.PoolCreated.contractRegister(({ event, context }) => {
-  context.addUniswapV3Pool(event.params.pool);      // Begin indexing this pool
-});
+indexer.contractRegister(
+  { contract: "UniswapV3Factory", event: "PoolCreated" },
+  ({ event, context }) => {
+  context.chain.UniswapV3Pool.add(event.params.pool);      // Begin indexing this pool
+}
+);
 
 // Handle Swap events emitted by the registered Uniswap V3 pools
-UniswapV3Pool.Swap.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "UniswapV3Pool", event: "Swap" },
+  async ({ event, context }) => {
   const entity: UniswapV3Pool_Swap = {
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`, // Unique swap ID
     chainId: event.chainId,                                           // Chain ID
@@ -27,4 +28,5 @@ UniswapV3Pool.Swap.handler(async ({ event, context }) => {
   };
 
   context.UniswapV3Pool_Swap.set(entity);                           // Store swap entity
-});
+}
+);
